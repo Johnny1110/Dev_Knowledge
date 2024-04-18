@@ -22,18 +22,30 @@ since 2024 April.
 
 ## Java Eccence
 
- * multi-thread 
+ * [multi-thread](java/multi-thread/README.md)
 
 <br>
 <br>
 
 ## SQL
 
+* [MySQL query optimization](sql/query-optimization/README.md)
+
+
+<br>
+<br>
+
+## Redis
+
+* [demo]
+
 
 <br>
 <br>
 
 ## System Desgin
+
+* [order payment timeout](system/design/order-payment-timeout/README.md)
 
 <br>
 <br>
