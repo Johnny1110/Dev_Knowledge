@@ -145,5 +145,113 @@ In this query, grouping is performed based on the "remarks" column. Creating an 
 
 <br>
 
-whever 
+Whenever you're using Java, .NET, or any other platform, and need to insert multiple records into a table, avoid doing it like this:
 
+```java
+for(Student student: students){
+    studentMapper.insert(student);
+}
+```
+
+Each invocation of the insert function occupies a database connection from the pool and executes the insert action.
+
+Instead, take advantage of batch insert like this:
+
+```java
+List<Student> students = ...;
+studentMapper.insertBatch(students);
+```
+
+The actual sql script is :
+
+```sql
+insert into student(name, class, grade) values 
+('Johnny', "1", 3), 
+('Jason', "2", 1), 
+('Beety', "1", 1);
+```
+
+it worth to noting, its not advisable to insert a large number of records in a single batch. If you have a significant amount of data to insert,divide it into smaller batches. Each batches should contains a maximum of 500 records. For example, there are 1400 student's data to insert. divide them into 3 parts, 500 500 and 400,perform batch insert 3 times.
+
+why not insert all data at once? Because batch insert a large amount of data may lead to momery leaks or deadlock issues.
+
+
+
+<br>
+<br>
+<br>
+<br>
+
+ ### 6. Using `limit`
+
+ <br>
+
+ there are 4 reasons why it's advisable to use `limit` when querying a significant amount of data:
+
+ * __Improving queries efficiency__: `limit` command restricts the amount of data retrived from the database, reduciing system's load.
+
+ * __Avoiding Over-selection of Data__: For large databases, selecting a huge amount of data potentially crush the server. Using `limit` constrain data retrieval, preventing over-selection and safeguarding the database.
+
+ * __Implementing Paging Queries__: `limit` can be utilized to implement paging queries, enabling efficient retrieval of data in manageable range.
+
+ <br>
+
+ __However, there are scenarios where `limit` may not perform optimally__. Consider a situation with millions of records in a table. When using `limit` with a large offset, the query can take a long time to executes:
+
+ ```sql
+select * from from table_name limit 10000, 10;
+ ```
+
+ Offset is 10000, and limit 10 amount. Here's the query logic breakdown:
+
+ 1. Read N amout of data from the table and add them to data collection.
+
+ 2. Repeat step 1 until desired offset (N = 10000 + 10).
+
+ 3. according to offset 10, discard specified offset amount of data (10000) from the collection set.
+
+ 4. return the remaining data (last 10).
+
+ <br>
+
+TO address this issue, you can do:
+ 
+ 1. Limit the number of pages a user can query.
+
+
+ 2. Take advantage of optimization such as with the id column.
+
+    ```sql
+    select * from table_name where (id > 10000) limit 10; 
+    ```
+
+    This skips processing of records before the specified id. just located to the data that ids are greater then 10000 and limit 10.(but in fact, a page query won't using id to sort records, so it's just a conception).
+
+3. Employ covering indexes, such as with the id column:
+
+    Only query the id first, then use those id to query the specific needed:
+
+    ```sql
+    select * 
+    from table_name 
+    where (id) in (
+        select id from table_name where (user = 'xxx')
+        ) 
+    limit 10000, 10;
+    ```
+
+
+<br>
+<br>
+<br>
+<br>
+
+ ### 6. Using `union all` instead of `union`
+
+ <br>
+
+ * `union all`: Retrieves data and retains duplicates.
+
+ * `union`: Retrieves data and discards duplicates.
+
+ Due to `union` discard duplicate data, it consumes more computing resources to iterating, sorting and comparison, if discarding duplicates isn't necessary, consider using UNION ALL instead.
