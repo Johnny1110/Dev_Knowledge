@@ -20,6 +20,14 @@ since 2024 April.
 
 <br>
 
+## Dev Philosophy
+
+* [淺談 SOLID (物件導向設計基本原則)](dev_philosophy/solid/README.md)
+
+
+<br>
+<br>
+
 ## Java Eccence
 
  * [multi-thread](java/multi-thread/README.md)
