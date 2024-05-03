@@ -30,7 +30,9 @@ since 2024 April.
 
 ## Java Eccence
 
- * [multi-thread](java/multi-thread/README.md)
+ * [multi-thread](java/multi-thread)
+
+ * [JVM Optimization](java/jvm)
 
 <br>
 <br>
