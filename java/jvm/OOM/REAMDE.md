@@ -42,9 +42,11 @@ __問 : 如果 Java 應用程式運行過程出現 OOM 該怎麼辦 ?__
 
 <br>
 
-本篇筆記需要搭配我寫的一個 JAR 檔做示範
+>本篇筆記使用 JDK 13 版本，需要搭配我寫的一個 JAR 檔做示範
 
-JAR: [demo-oom.jar]()
+>__Download JAR__: [demo-oom.jar](https://github.com/Johnny1110/Dev_Knowledge/raw/main/java/jvm/OOM/jar/demo-oom.jar)
+
+>如果想跟著筆記操作，可以下載下來使用。
 
 <br>
 
@@ -78,8 +80,130 @@ JAR: [demo-oom.jar]()
 在 JVM 啟動時，需要設定一個 dump 參數。
 
 ```bash
-java -Xms1m -Xmx5m -jar demo-oom.jar oom
+java -Xms1m -Xmx5m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -jar demo-oom.jar oom 
 ```
+<br>
+
+參數說明:
+
+`-Xms1m`: 設定 Heap 最小 1MB。
+
+`-Xmx5m`: 設定 Heap 最大 5MB (設定這麼小單純是要他爆)。
+
+`-XX:+HeapDumpOnOutOfMemoryError`: 設定當 OOM 時，Dump Heap 資料。
+
+`--XX:HeapDumpPath=./`: 設定當 Dump Heap 資料路徑。
+
+`-jar demo-oom.jar`: 指定要執行的 jar 
+
+`oom`: 我的程式碼客製化命令，`oom` 代表直接爆炸，`noom` 代表塞到快爆但是不要爆。
+
+<br>
+
+__如果上線運行的應用程式沒有設定 `HeapDumpOnOutOfMemoryError`，那直接就死無對證了。所以這個參數一定要加在生產環境的 jvm 啟動參數裡面。(磁碟空間體記得加大，不然可能容量不夠寫)__
+
+
+<br>
+
+執行結果:
+
+```bash
+> java -Xms1m -Xmx5m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -jar demo-oom.jar oom      
+
+perform OOM...
+java.lang.OutOfMemoryError: Java heap space
+Dumping heap to ./\java_pid20704.hprof ...
+Heap dump file created [9300671 bytes in 0.039 secs]
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.lang.Long.fastUUID(Long.java:436)
+        at java.base/java.lang.System$2.fastUUID(System.java:2205)
+        at java.base/java.util.UUID.toString(UUID.java:395)
+        at frizo.lab.DemoObject.<init>(DemoObject.java:10)
+        at frizo.lab.OOMDemo.performOOM(OOMDemo.java:11)
+        at frizo.lab.Main.main(Main.java:10)
+
+```
+<br>
+
+發生 OOM 後，找到 heap log 文件
+
+![1](imgs/1.jpg)
+
+<br>
+
+要查看這個文件可以使用 idea 直接打開，或者使用 [VisualVM](https://visualvm.github.io/) 查看。
+
+我使用 idea 示範。
+
+<br>
+
+![2](imgs/2.jpg)
+
+<br>
+
+可以看到 Retain 占比最高的幾個 Class，像是 Java 原生類別我們就先放過，因為不好排查，然後我們就可以鎖定一個可疑的類別 frizo.lab.DemoObject。
+
+點進去一看究竟:
+
+<br>
+
+![3](imgs/3.jpg)
+
+<br>
+
+可以看到 CG Root 的引用指向 OOMDemo 類別的 performOOM() 方法第 11 行。那就來看看程式碼中的 11 行幹了甚麼。
+
+<br>
+
+![4](imgs/4.jpg)
+
+<br>
+
+原來是這裡寫了一個迴圈不停建立物件往 ArrayList 塞。以上問題排查結束。
+
+
+<br>
+<br>
+<br>
+<br>
+
+## 情境 2. 系統還在運行，但是記憶體快撐爆，或者 CPU 占用過高。
+
+<br>
+<br>
+
+這種情況可以使用 `jmap -dump` 取得當前直接階段的 heap 狀態，值得一提的是，使用這個指令會造成服務停頓，heap 越大停頓越久，在生產環境要慎用。
+
+<br>
+
+先啟動 jar 檔案。
+
+```bash
+java -Xms1m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./ -jar demo-oom.jar noom
+```
+
+<br>
+
+dump 資料出來。
+
+<br>
+
+
+```bash
+> jps
+
+14704 demo-oom.jar
+17904 RemoteMavenServer36
+15044 Jps
+1512 
+
+> jmap -dump:format=b,file=heap.hprof 14704
+
+Heap dump file created
+
+```
+
+
 
 
 <br>
@@ -96,6 +220,9 @@ java -Xms1m -Xmx5m -jar demo-oom.jar oom
 
 <br>
 
+
+當我們確定程式碼沒問題，且已經沒有優化空間了。那就可以著手看看 JVM 優化了。
+
 針對啟動要被排查的 Java 應用後，透過 `jps` 查詢應用 PID :
 
 ```bash
@@ -111,6 +238,10 @@ java -Xms1m -Xmx5m -jar demo-oom.jar oom
 ```bash
 jhsdb jmap --heap --pid 10088
 ```
+
+<br>
+
+之後的排查操作就跟上面一樣了。
 
 <br>
 
@@ -172,6 +303,69 @@ G1 Old Generation:
 其中詳細資料已經都列出註解說明其意義了，如果有看前面講到 [JVM 優化系列(二) 運行時內存 (新生代，老年代，永久代)](https://github.com/Johnny1110/Dev_Knowledge/blob/main/java/jvm/runtime/REAMDE.md) 應該或多或少都看得懂。
 
 <br>
+
+一般來說，像是 heap 內的容量比例分配，大小這種設定沒那個必要真的不太需要調整，新生代容量不足或物件大小超過設定值就會把物件移到老年代，老年代如果容量不足就會發生 OOM，__如過在總容量不變的條件下去配置新生代，老年代，永久代的大小比例。那就要真的很嚴肅的分析跟實驗__。其次還有 CG 方案可選擇。那就有太多可以調的地方了。
+
+基本上針對 JVM 的內存，我們一般大眾沒有特別需求的情況下，就把 Heap 開大就行了。
+
+<br>
+
+```
+java -Xms1024m -Xmx2048m ...
+```
+
+<br>
+<br>
+<br>
+<br>
+
+以下列出一些 JVM 優化參數 參考文章: https://juejin.cn/post/7283766466084290596?from=search-suggest
+
+<br>
+
+```bash
+# 內存參數
+-Xms：初始堆大小
+-Xmx：最大堆疊大小
+-Xmn：新生代大小
+-Xss：執行緒堆疊大小，預設為1M
+-XX:MaxPermSize=n:設定持久代大小
+-XX:NewRatio：新生代與老年代的比例
+-XX:SurvivorRatio：Eden區和Survivor區的比例
+
+# GC 參數
+-XX:+UseSerialGC：使用 Serial 垃圾回收器
+-XX:+UseParallelGC：使用 Parallel 垃圾回收器
+-XX:+UseConcMarkSweepGC：使用 CMS 垃圾回收器
+-XX:+UseG1GC：使用 G1 垃圾回收器
+-XX:MaxGCPauseMillis：最大GC停頓時間
+-XX:+UseAdaptiveSizePolicy：自適應 GC 策略
+
+# 列印
+-XX:+PrintGCTimeStamps：列印 GC 停頓耗時
+-XX:+PrintGCApplicationStoppedTime：列印垃圾回收期間程式暫停的時間.
+-XX:+PrintHeapAtGC：列印 GC 前後的詳細堆疊訊息
+-Xloggc:filename：把相關日誌資訊記錄到檔案以便分析.
+
+# Thread 
+-Xss：每个线程的堆栈大小
+-XX:ParallelThreads：并行处理的线程数
+-XX:+UseThreadPriorities：启用线程优先级
+-XX:+UseCondCardMark：使用条件卡片标记
+
+# 類別載入優化
+-XX:MaxPermSize：最大方法區大小
+-XX:+CMSClassUnloadingEnabled：啟用 CMS 類別卸載
+-XX:+UseCompressedOops：使用壓縮物件指針
+
+# 其他
+-XX:+UseBiasedLocking：啟用偏向鎖
+-XX:+OptimizeStringConcat：啟用字串拼接最佳化
+-XX:MaxTenuringThreshold：物件晉升老年代的年齡閾值(多老算老)
+-XX:CompileThreshold：JIT 編譯閾值
+-XX:+PrintGCDetails：列印 GC 詳細資訊
+```
+
 <br>
 
 
