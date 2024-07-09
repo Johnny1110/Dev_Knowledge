@@ -69,7 +69,7 @@ since 2024 April.
 3. K8s 研究:
     * https://ithelp.ithome.com.tw/m/articles/10288389
 
-4. Web3 以太訪 ABI 互動
+4. Web3 以太訪 ABI 互動 (用 golang 寫一個 web)
 
 5. Web3 合約編寫部署
     * https://vocus.cc/article/62899a13fd89780001d43679
