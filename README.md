@@ -82,6 +82,7 @@ since 2024 April.
     * https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
   
 8. 實作一次模擬 MySQL 分庫分表，Partition 研究：
-   * https://developer.aliyun.com/article/1253020
-   * https://ke.qq.com/course/457506/4046378884332322#term_id=100547500
-   * https://github.com/GoodBoy2333/sharding-jdbc-demo
+   * https://developer.aliyun.com/article/1253020 (阿里雲短介紹)
+   * https://ke.qq.com/course/457506/4046378884332322#term_id=100547500 (騰訊課程影片)
+   * https://github.com/GoodBoy2333/sharding-jdbc-demo (分庫分表)
+   * https://blog.csdn.net/qq_26664043/article/details/138452285 (分區 CSDN)
