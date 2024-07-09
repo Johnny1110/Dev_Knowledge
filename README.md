@@ -77,4 +77,5 @@ https://vocus.cc/article/62899a13fd89780001d43679
 6. 區塊鏈密碼學
 
 7. Spring Boot 2 Actuator + Prometheus + Grafana 監控視覺化簡介(客製化 Metrics) :
-  https://www.tpisoftware.com/tpu/articleDetails/2446
+  * https://www.tpisoftware.com/tpu/articleDetails/2446
+  * https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
