@@ -49,7 +49,6 @@ since 2024 April.
 
 * [demo]
 
-
 <br>
 <br>
 
@@ -59,3 +58,23 @@ since 2024 April.
 
 <br>
 <br>
+
+## TODO List(挖坑)
+
+1. 設計資料及應用
+https://github.com/Johnny1110/ddia
+
+2. MongoDB 基礎以及應用，底層設計
+
+3. K8s 研究:
+    https://ithelp.ithome.com.tw/m/articles/10288389
+
+4. Web3 以太訪 ABI 互動
+
+5. Web3 合約編寫部署
+https://vocus.cc/article/62899a13fd89780001d43679
+
+6. 區塊鏈密碼學
+
+7. Spring Boot 2 Actuator + Prometheus + Grafana 監控視覺化簡介(客製化 Metrics) :
+  https://www.tpisoftware.com/tpu/articleDetails/2446
