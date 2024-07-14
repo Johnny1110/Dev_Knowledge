@@ -86,3 +86,9 @@ since 2024 April.
    * https://ke.qq.com/course/457506/4046378884332322#term_id=100547500 (騰訊課程影片)
    * https://github.com/GoodBoy2333/sharding-jdbc-demo (分庫分表)
    * https://blog.csdn.net/qq_26664043/article/details/138452285 (分區 CSDN)
+  
+9. Frizo Side Project:
+   基本: 仿 line 做一個聊天通訊軟體。並支持使用者匯入 Web 3.0 錢包。
+   進階: 串接 line pay 做 C2C ETH 交易 -> 敲定交易價格後，買方把錢轉到第三方 line pay 帳號中，賣家透過鏈上交易，產生 txHash 並交由後端去 web3 驗證，確定都沒問題後，line pay 第三方帳號匯款給賣家。如果賣方沒有去鏈上轉帳 (沒有 txHASH) 則 line pay 第三方帳號會在 1 hr 後將錢退還給買方。
+   最終: 做成開公司 ?
+   
