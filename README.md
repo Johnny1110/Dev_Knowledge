@@ -61,6 +61,20 @@ since 2024 April.
 
 ## TODO List(挖坑)
 
+
+### 急迫:
+
+1. Rust 程式語言學習: https://rust-lang.tw/book-tw/title-page.html
+2. Design Pattern 學習：看書
+3. 分庫分表 ShardSphere-5 教學課程: https://www.bilibili.com/video/BV1SqnZexEBB?spm_id_from=333.788.videopod.episodes&vd_source=9780a181ac9f1fee5f680f255ee5bc73&p=2
+4. Kafka 學習：看書
+5. 鳳凰架構：https://icyfenix.cn/
+6. 深入瞭解 JVM: 看書
+
+<br>
+
+### 等待任務
+
 1. 設計資料及應用
     * https://github.com/Johnny1110/ddia
 
@@ -78,8 +92,4 @@ since 2024 April.
 6. Spring Boot 2 Actuator + Prometheus + Grafana 監控視覺化簡介(客製化 Metrics) :
     * https://www.tpisoftware.com/tpu/articleDetails/2446
     * https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
-  
-7. 實作一次模擬 MySQL 分庫分表，Partition 研究：
-   * ShardSphere-5 教學課程: https://www.bilibili.com/video/BV1SqnZexEBB?spm_id_from=333.788.videopod.episodes&vd_source=9780a181ac9f1fee5f680f255ee5bc73&p=2
 
-8. 鳳凰架構：https://icyfenix.cn/
