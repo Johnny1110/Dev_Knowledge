@@ -80,6 +80,6 @@ since 2024 April.
     * https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
   
 7. 實作一次模擬 MySQL 分庫分表，Partition 研究：
-   * 尙硅谷 ShardSphere-5 教學課程: https://www.bilibili.com/video/BV1ta411g7Jf/?spm_id_from=333.337.search-card.all.click&vd_source=9780a181ac9f1fee5f680f255ee5bc73
+   * ShardSphere-5 教學課程: https://www.bilibili.com/video/BV1SqnZexEBB?spm_id_from=333.788.videopod.episodes&vd_source=9780a181ac9f1fee5f680f255ee5bc73&p=2
 
 8. 鳳凰架構：https://icyfenix.cn/
