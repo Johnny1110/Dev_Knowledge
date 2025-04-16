@@ -73,6 +73,16 @@ since 2024 April.
 
 <br>
 
+### 實作：
+
+1. crypto-exchange with GoLang
+2. Implement part of git from Rust [link](https://www.youtube.com/watch?v=u0VotuGzD_w)
+3. blockchain with GoLang
+4. Implement TCP in Rust [part-1](https://www.youtube.com/watch?v=bzja9fQWzdA) [part-2](https://www.youtube.com/watch?v=OCpt1I0MWXE)
+5. Implementing a Lox interpreter in Rust [link](https://www.youtube.com/watch?v=mNOLaw-_Buc&t=1s)
+
+<br>
+
 ### 等待任務
 
 1. 設計資料及應用
