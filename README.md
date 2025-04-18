@@ -103,3 +103,5 @@ since 2024 April.
     * https://www.tpisoftware.com/tpu/articleDetails/2446
     * https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
 
+7 基本功 | 一文讲清多线程和多线程同步: https://mp.weixin.qq.com/s?__biz=MjM5NjQ5MTI5OA==&mid=2651778446&idx=1&sn=44306b644777a4d939730e7774071541&scene=21#wechat_redirect
+
