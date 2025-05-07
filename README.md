@@ -80,6 +80,11 @@ since 2024 April.
 3. blockchain with GoLang
 4. Implement TCP in Rust [part-1](https://www.youtube.com/watch?v=bzja9fQWzdA) [part-2](https://www.youtube.com/watch?v=OCpt1I0MWXE)
 5. Implementing a Lox interpreter in Rust [link](https://www.youtube.com/watch?v=mNOLaw-_Buc&t=1s)
+6. Golang Game [link](https://www.youtube.com/watch?v=QrAZ_WlU93M&list=PL0xRBLFXXsP5pQmRnlJlBSrgQ-5IKDehz)
+7. Solidity DEX [link](https://www.youtube.com/watch?v=Hk4aHmNOhf4&list=PL0xRBLFXXsP63_Bn386ch1HftnUMmowT-)
+8. Quant Trading Programming [link](https://www.youtube.com/watch?v=n0SqZmEBWpk&list=PL0xRBLFXXsP6sG4IG1-gOfOCz5zAhsx5T)
+9. Decentralized Poker Game [link](https://www.youtube.com/watch?v=Iw5Y_-vsGac&list=PL0xRBLFXXsP4AqkUr9XHdFJwfwN-dy9oS)
+10. Distributed CAS Storage [link](https://www.youtube.com/watch?v=d_pVmR_0p0E&list=PL0xRBLFXXsP5NTAYbcHegUVhuBdUFffSN)
 
 <br>
 
