@@ -85,6 +85,7 @@ since 2024 April.
 8. Quant Trading Programming [link](https://www.youtube.com/watch?v=n0SqZmEBWpk&list=PL0xRBLFXXsP6sG4IG1-gOfOCz5zAhsx5T)
 9. Decentralized Poker Game [link](https://www.youtube.com/watch?v=Iw5Y_-vsGac&list=PL0xRBLFXXsP4AqkUr9XHdFJwfwN-dy9oS)
 10. Distributed CAS Storage [link](https://www.youtube.com/watch?v=d_pVmR_0p0E&list=PL0xRBLFXXsP5NTAYbcHegUVhuBdUFffSN)
+11. Rust bevy Game [link](https://johanhelsing.studio/posts/extreme-bevy)
 
 <br>
 
