@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # 收集系統指標 (CPU, Memory)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 5s
+
+  # Golang 應用程式有暴露 /metrics 端點，也可以收集
+  # - job_name: 'exchange-app'
+  #   static_configs:
+  #     - targets: ['exg:8080']
+  #   metrics_path: '/metrics'
+  #   scrape_interval: 5s
