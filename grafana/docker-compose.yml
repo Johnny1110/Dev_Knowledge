@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Node Exporter - 收集系統指標 (CPU, Memory 等)
   node-exporter:

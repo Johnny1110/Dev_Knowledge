@@ -329,8 +329,14 @@ datasources:
 ### Boot up!!!
 
 ```
-docker-compose up -d
-docker-compose ps
+docker compose up -d
+docker compose ps
+```
+
+shutdown cmd:
+
+```
+docker compose down
 ```
 
 __Make sure expose port `:3000` on firewall settings (for Grafana Web UI)__
@@ -362,7 +368,15 @@ __Make sure expose port `:3000` on firewall settings (for Grafana Web UI)__
     ![4](imgs/4.png)
 
     <br>
-    
+
+    ![6](imgs/6.png)
+
+    <br>
+
+    ![7](imgs/7.png)
+
+    <br>
+
     Finally you will see the dashboard.
 
     ![5](imgs/5.png)
