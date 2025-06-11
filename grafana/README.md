@@ -193,9 +193,8 @@ dir
 ### 1. Create docker-compose.yml
 
 ```yml
-version: '3.8'
-
 services:
+  # Node Exporter
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
@@ -211,7 +210,10 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - frizo-net
 
+  # Prometheus
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -219,9 +221,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-        # prometheus settings
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-        # prometheus storage
       - prometheus-data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -229,7 +229,10 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=30d'
+    networks:
+      - frizo-net
 
+  # Grafana
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -237,19 +240,21 @@ services:
     ports:
       - "3000:3000"
     environment:
-        # default account : admin, we setup pwd: admin123
       - GF_SECURITY_ADMIN_PASSWORD=admin123
-        # Important!: allow Dashboard embed into iframe
       - GF_SECURITY_ALLOW_EMBEDDING=true
     volumes:
-        # /var/lib/grafana is where grafana store data
       - grafana-data:/var/lib/grafana
-        # grafana config settings
       - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - frizo-net
 
 volumes:
   prometheus-data:
   grafana-data:
+
+networks:
+  frizo-net:
+    external: true
 ```
 
 
@@ -329,6 +334,9 @@ datasources:
 ### Boot up!!!
 
 ```
+# create docker network first
+docker network create frizo-net
+
 docker compose up -d
 docker compose ps
 ```

@@ -31,6 +31,7 @@ since 2024 April.
 ## DevOps
 
 * [Grafana Basic - 1 (Grafana + Prometheus + Node-Exporter)](grafana)
+* [Kibana Basic - 1 (Elasticsearch, Logstash, Kibana)](kibana)
 
 ## Java Eccence
 
