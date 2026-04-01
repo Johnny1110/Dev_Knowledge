@@ -32,6 +32,7 @@ since 2024 April.
 
 * [Grafana Basic - 1 (Grafana + Prometheus + Node-Exporter)](grafana)
 * [Kibana Basic - 1 (Elasticsearch, Logstash, Kibana)](kibana)
+* [K8s Basic - The Complete Go & Kubernetes Masterclass: Building the Order Mall](k8s/README.md)
 
 ## Java Eccence
 
