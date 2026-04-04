@@ -159,14 +159,12 @@ CMD ["./order-api"]
 
 ```Bash
 kind create cluster --name order-mall
-Build Docker Images:
 ```
 
 ### 2. Build Docker Images:
 ```Bash
 docker build -t product-api:v1 ./product-api
 docker build -t order-api:v1 ./order-api
-Load Images into the Cluster:
 ```
 
 ### 3. Load Images into the Cluster:
