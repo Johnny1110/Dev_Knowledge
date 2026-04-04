@@ -198,7 +198,7 @@ CMD ["./order-api"]
 
 To allow our local browser to talk to the K8s Ingress controller without clunky port-forwarding, we need to map our computer's port 80 to the cluster's port 80 during creation.
 
-Create a file named `k8s/kind-config.yaml`:
+Create a file named `kind-config.yaml`:
 
 ```
 kind: Cluster
