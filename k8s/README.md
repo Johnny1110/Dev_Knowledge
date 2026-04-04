@@ -37,6 +37,45 @@ Ensure you have the following installed:
 <br>
 <br>
 
+## k8s 架構圖
+```
+                             🌐 外部請求 (Browser / Postman)
+                                          │
+                                          ▼
+                                ┌───────────────────┐
+                                │   Ingress (Nginx) │  <-- Phase 7: 路由分發 (localhost:80)
+                                └───────────────────┘
+                                     │         │
+                   /orders (Prefix)  │         │  /products (Prefix)
+                                     ▼         ▼
+                ┌─────────────────────┐       ┌───────────────────────┐
+  Phase 4:      │ Service (order-api) │       │ Service (product-api) │ <-- 內部負載均衡
+  Networking    └─────────────────────┘       └───────────────────────┘
+                           │                              │
+                           ▼                              ▼
+                ┌─────────────────────┐       ┌───────────────────────┐
+  Phase 3:      │   Pod (order-api)   │ ────▶ │   Pod (product-api)   │ <-- 內部 DNS 互相呼叫
+  Compute       │   (Replicas: 1~3)   │       │    (Replicas: 1)      │     (http://product-api:8080)
+                └─────────────────────┘       └───────────────────────┘
+                                                          │
+                                                          │ (讀取 ConfigMap & Secret)
+                                       ┌──────────────────┼──────────────────┐
+                                       ▼                  ▼                  ▼
+  Phase 5 & 6:              ┌─────────────┐       ┌─────────────┐     ┌─────────────┐
+  State & Config            │  ConfigMap  │       │   Secret    │     │   Service   │
+                            │ (app-config)│       │(credentials)│     │ (postgres & │
+                            └─────────────┘       └─────────────┘     │   redis)    │
+                                                                      └─────────────┘
+                                                                             │
+                                                                             ▼
+                                                                  ┌────────────────────┐
+                                                                  │ Persistent Volume  │ <-- 資料落地持久化
+                                                                  └────────────────────┘
+```
+
+<br>
+<br>
+
 ## Phase 1: Containerization (The Go Microservices)
 
 We will build two services: a product-api (catalog) and an order-api (checkout) that communicates with the product service.
@@ -155,10 +194,33 @@ CMD ["./order-api"]
 
 ## Phase 2: The Local Cluster (`kind`) -> kind is "K8s in Docker"
 
-### 1. Create the Cluster:
+### 1. Create the Cluster with Network Mapping:
+
+To allow our local browser to talk to the K8s Ingress controller without clunky port-forwarding, we need to map our computer's port 80 to the cluster's port 80 during creation.
+
+Create a file named `k8s/kind-config.yaml`:
+
+```
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+```
+
+### 2. Create the Cluster:
 
 ```Bash
-kind create cluster --name order-mall
+kind create cluster --name order-mall --config kind-config.yaml
 ```
 
 ### 2. Build Docker Images:
@@ -205,9 +267,16 @@ spec:
       containers:
       - name: api
         image: product-api:v1
-        imagePullPolicy: Never # Crucial for local Kind images
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
 ---
 apiVersion: v1
 kind: Service
@@ -247,6 +316,13 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
 ---
 apiVersion: v1
 kind: Service
@@ -489,14 +565,13 @@ spec:
 
 ### 3. Apply and Test:
 
+Apply your Ingress rules:
+
 ```bash
 kubectl apply -f k8s/ingress.yaml
 
-# In a separate terminal, forward the Ingress traffic:
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller 8080:80
-
 # Test your full system!
-curl -X POST http://localhost:8080/orders
+curl -X POST http://localhost/orders
 ```
 
 <br>
